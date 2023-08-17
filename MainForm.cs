@@ -88,10 +88,13 @@ namespace jsxbin_to_jsx_GUI
                 jsx = new Beautifier().Beautify(jsx);
                 File.WriteAllText(decoderArgs.JsxFilepath, jsx, Encoding.UTF8);
                 Console.WriteLine("Jsxbin successfully decoded to {0}", decoderArgs.JsxFilepath);
+                SuccessAlert alert = new SuccessAlert();
+                alert.ShowDialog();
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Decoding failed. If this problem persists, please raise an issue on github. Error message: {0}. Stacktrace: {1}.", ex.Message, ex.StackTrace);
+
             }
         }
 
