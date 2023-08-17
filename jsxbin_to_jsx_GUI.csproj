@@ -21,6 +21,9 @@
       <Compile Update="OutputPathAlert.cs">
         <SubType>Form</SubType>
       </Compile>
+      <Compile Update="FailAlert.cs">
+        <SubType>Form</SubType>
+      </Compile>
       <Compile Update="SuccessAlert.cs">
         <SubType>Form</SubType>
       </Compile>
