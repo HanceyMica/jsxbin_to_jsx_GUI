@@ -11,7 +11,7 @@
 
         public string Get(string key)
         {
-            return table[key];
+            return table.TryGetValue(key, out var value) ? value : null;
         }
     }
 }

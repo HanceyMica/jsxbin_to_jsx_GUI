@@ -2,24 +2,27 @@ namespace jsxbin_to_jsx_GUI
 {
     class Program
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
         [STAThread]
         static void Main(String[] args)
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration..
+            if (args.Length > 0 && (args[0] == "--help" || args[0] == "-h" || args[0] == "/?"))
+            {
+                PrintHelp();
+                return;
+            }
+
             ApplicationConfiguration.Initialize();
             Application.Run(new MainForm());
         }
 
         static void PrintHelp()
         {
-            Console.WriteLine("Usage: [-v] jsxbin_to_jsx JSXBIN JSX");
-            Console.WriteLine("Example: jsxbin_to_jsx -v encoded.jsxbin decoded.jsx");
-            Console.WriteLine("Flags:");
-            Console.WriteLine("-v print tree structure to stdout");
+            Console.WriteLine("Usage: jsxbin_to_jsx_gui.exe [OPTIONS]");
+            Console.WriteLine("Options:");
+            Console.WriteLine("  --help, -h, /?  显示帮助信息");
+            Console.WriteLine("Examples:");
+            Console.WriteLine("  jsxbin_to_jsx_gui.exe        启动GUI");
+            Console.WriteLine("  jsxbin_to_jsx_gui.exe --help 显示帮助");
         }
     }
 }

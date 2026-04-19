@@ -35,7 +35,7 @@
 
         public char getCur()
         {
-            return _input[_index];
+            return _index < _input.Length ? _input[_index] : '\0';
         }
 
         public bool IsHex(int num)

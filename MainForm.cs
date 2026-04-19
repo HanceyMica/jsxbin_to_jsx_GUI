@@ -14,8 +14,8 @@ namespace jsxbin_to_jsx_GUI
         private void inputButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Title = "ÇëÑ¡ÔñÊäÈëÎÄ¼þ";
-            dialog.Filter = "¶þ½øÖÆJSXÎÄ¼þ(*.jsxbin)|*.jsxbin";
+            dialog.Title = "è¯·é€‰æ‹©è¾“å…¥æ–‡ä»¶";
+            dialog.Filter = "äºŒè¿›åˆ¶JSXæ–‡ä»¶(*.jsxbin)|*.jsxbin";
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 string file = dialog.FileName;
@@ -27,7 +27,7 @@ namespace jsxbin_to_jsx_GUI
 
         private void outputButton_Click(object sender, EventArgs e)
         {
-            if (textInput.Text.Equals("") || textInput.Text == null)
+            if (string.IsNullOrEmpty(textInput.Text))
             {
                 OutputPathAlert alert = new OutputPathAlert();
                 alert.ShowDialog();
@@ -35,7 +35,7 @@ namespace jsxbin_to_jsx_GUI
             else
             {
                 FolderBrowserDialog dialog = new FolderBrowserDialog();
-                dialog.Description = "ÇëÑ¡ÔñÊä³öÎÄ¼þ¼Ð";
+                dialog.Description = "è¯·é€‰æ‹©è¾“å‡ºæ–‡ä»¶å¤¹";
                 dialog.UseDescriptionForTitle = true;
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
@@ -45,10 +45,9 @@ namespace jsxbin_to_jsx_GUI
             }
         }
 
-        // Âß¼­£ºÈç¹ûÊäÈëÊä³öÎÄ±¾²»Îª¿Õ£¬Ôò¿ªÊ¼µ÷ÓÃDecode()£¬·ñÔòµ¯³öNullInputAlert
         private void converButton_Click(object sender, EventArgs e)
         {
-            if (textInput.Text.Equals("") || textOutput.Text.Equals(""))
+            if (string.IsNullOrEmpty(textInput.Text) || string.IsNullOrEmpty(textOutput.Text))
             {
                 PathAlert alert = new PathAlert();
                 alert.ShowDialog();
@@ -94,7 +93,8 @@ namespace jsxbin_to_jsx_GUI
             catch (Exception ex)
             {
                 Console.WriteLine("Decoding failed. If this problem persists, please raise an issue on github. Error message: {0}. Stacktrace: {1}.", ex.Message, ex.StackTrace);
-
+                FailAlert alert = new FailAlert();
+                alert.ShowDialog();
             }
         }
 

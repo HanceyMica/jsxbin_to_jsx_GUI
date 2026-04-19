@@ -3,15 +3,43 @@ using System.Text.RegularExpressions;
 
 namespace jsxbin_to_jsx_GUI.JsxbinDecoding
 {
-    public abstract class AbstractNode : INode
+    public abstract class AbstractNode : INode, IPrintableNode
     {
         public const double ALL_VERSIONS = 0;
         private const string alphabet_lower = "ghijklmn";
         private const string alphabet_upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef";
         private static readonly Dictionary<string, Type> decoders = new Dictionary<string, Type>();
+        private static readonly Dictionary<string, Type> decoderTypesCache = new Dictionary<string, Type>();
+        private static bool decoderCacheInitialized = false;
         private static ScanState scanState;
         private static readonly Regex ValidIdentifier = new Regex("^[a-zA-Z_$][0-9a-zA-Z_$]*$", RegexOptions.Compiled);
         private static IReferenceDecoder referenceDecoder;
+
+        static AbstractNode()
+        {
+            InitializeDecoderCache();
+        }
+
+        private static void InitializeDecoderCache()
+        {
+            if (decoderCacheInitialized)
+                return;
+
+            var type = typeof(INode);
+            var types = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => p.IsClass && !p.IsAbstract && p.IsSubclassOf(typeof(AbstractNode)));
+
+            foreach (var t in types)
+            {
+                if (!decoderTypesCache.ContainsKey(t.Name))
+                {
+                    decoderTypesCache[t.Name] = t;
+                }
+            }
+
+            decoderCacheInitialized = true;
+        }
 
         public abstract string Marker { get; }
         public abstract NodeType NodeType { get; }
@@ -94,17 +122,21 @@ namespace jsxbin_to_jsx_GUI.JsxbinDecoding
         private static void InitializeDecoders(ScanState scanState, double version)
         {
             decoders.Clear();
-            var type = typeof(INode);
-            var types = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(s => s.GetTypes())
-                .Where(p => p.IsClass && !p.IsAbstract && p.IsSubclassOf(typeof(AbstractNode)));
-            foreach (var t in types)
+
+            if (!decoderCacheInitialized)
             {
+                InitializeDecoderCache();
+            }
+
+            foreach (var kvp in decoderTypesCache)
+            {
+                var t = kvp.Value;
                 INode n = (INode)Activator.CreateInstance(t);
-                if (n.JsxbinVersion == ALL_VERSIONS || n.JsxbinVersion == version)
+                if (n.JsxbinVersion == ALL_VERSIONS || Math.Abs(n.JsxbinVersion - version) < 0.001)
                     decoders.Add(n.Marker, t);
             }
-            if (version == 1.0)
+
+            if (Math.Abs(version - 1.0) < 0.001)
                 referenceDecoder = new ReferenceDecoderVersion1();
             else
                 referenceDecoder = new ReferenceDecoderVersion2();
@@ -120,14 +152,21 @@ namespace jsxbin_to_jsx_GUI.JsxbinDecoding
             else if (decoders.ContainsKey(marker.ToString()))
             {
                 var type = decoders[marker.ToString()];
-                INode node = (INode)Activator.CreateInstance(type);
+                var node = (INode)Activator.CreateInstance(type);
                 bool ignoreHeaderFunction = this.NodeType == NodeType.Root;
                 if (PrintStructure && !ignoreHeaderFunction)
                 {
                     Console.WriteLine(new string(' ', 4 * IndentLevel) + node.NodeType.ToString());
-                    node.IndentLevel = IndentLevel + 1;
+                    if (node is IPrintableNode printableNode)
+                    {
+                        printableNode.IndentLevel = IndentLevel + 1;
+                        printableNode.PrintStructure = PrintStructure;
+                    }
                 }
-                node.PrintStructure = PrintStructure;
+                else if (node is IPrintableNode printableNode)
+                {
+                    printableNode.PrintStructure = PrintStructure;
+                }
                 node.Decode();
                 return node;
             }
@@ -246,14 +285,14 @@ namespace jsxbin_to_jsx_GUI.JsxbinDecoding
             {
                 return "";
             }
-            string res = "";
+            StringBuilder res = new StringBuilder();
             int i = length;
             while (i > 0)
             {
-                res += DecodeLiteral(false, true);
+                res.Append(DecodeLiteral(false, true));
                 i--;
             }
-            return res;
+            return res.ToString();
         }
 
         public string DecodeNumberCore(int numberLength, bool twosComplement)
