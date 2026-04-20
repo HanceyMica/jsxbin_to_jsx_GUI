@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "jsxbin_to_jsx_GUI", "jsxbin_to_jsx_GUI.csproj", "{49311C13-F3AB-49C3-9A17-7FE4221D2E37}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{49311C13-F3AB-49C3-9A17-7FE4221D2E37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49311C13-F3AB-49C3-9A17-7FE4221D2E37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49311C13-F3AB-49C3-9A17-7FE4221D2E37}.Debug|x64.ActiveCfg = Debug|x64
+		{49311C13-F3AB-49C3-9A17-7FE4221D2E37}.Debug|x64.Build.0 = Debug|x64
+		{49311C13-F3AB-49C3-9A17-7FE4221D2E37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49311C13-F3AB-49C3-9A17-7FE4221D2E37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49311C13-F3AB-49C3-9A17-7FE4221D2E37}.Release|x64.ActiveCfg = Release|x64
+		{49311C13-F3AB-49C3-9A17-7FE4221D2E37}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {05C29EFA-5065-4E2A-BA3E-85E17415BF56}
+	EndGlobalSection
+EndGlobal
